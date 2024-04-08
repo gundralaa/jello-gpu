@@ -1,0 +1,45 @@
+layout(local_size_x = 1) in;
+
+layout(std140, binding = 1) buffer positions_SSBO {
+    vec4 positions[];
+};
+
+layout(std140, binding = 3) buffer forces_SSBO { 
+    vec4 forces[];
+};
+
+layout(std140, binding = 4) buffer springs_SSBO { 
+    struct
+    {
+        uint point1;
+        uint point2;
+        uint type;
+        float len;
+    } springs[];
+};
+
+layout(std140) uniform block_id_UBO { 
+    uint block_id; // [0, 8)
+};
+
+void main()
+{
+    for (uint i = (gl_WorkGroupID.x*8+block_id) * BLOCK_SIZE; i < (gl_WorkGroupID.x*8+block_id+1) * BLOCK_SIZE; i++)
+    {
+        /*struct
+        {
+            int point1;
+            int point2;
+            int type;
+        } spring = springs[i];
+
+        vec3 difference = forces[spring.point2] - forces[spring.point1];
+        double maxDistance = 1.1 * distances[spring.type];
+        double posDistance = difference.norm();
+        double correctiveDistance = posDistance - maxDistance;
+        if (posDistance <= maxDistance) continue;
+
+        spring.pm_a->position -= ((correctiveDistance/2) * (spring.pm_a->position - spring.pm_b->position).unit());
+        spring.pm_b->position -= ((correctiveDistance/2) * (spring.pm_b->position - spring.pm_a->position).unit());*/
+    }
+}  

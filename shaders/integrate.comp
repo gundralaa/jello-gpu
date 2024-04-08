@@ -1,0 +1,24 @@
+layout(local_size_x = 1) in;
+
+layout(std140, binding = 1) buffer positions_SSBO {
+    vec4 positions[];
+};
+
+layout(std140, binding = 2) buffer last_positions_SSBO {
+    vec4 last_positions[];
+};
+
+layout(std140, binding = 3) buffer forces_SSBO { 
+    vec4 forces[];
+};
+
+void main()
+{
+    float delta_t = 1/200.0f;
+    float mass = 1.0/8.0f;
+
+    vec4 pos = positions[gl_WorkGroupID.x];
+    positions[gl_WorkGroupID.x] += 0.995f * (pos - last_positions[gl_WorkGroupID.x]) + (forces[gl_WorkGroupID.x] / mass) * delta_t * delta_t;
+    last_positions[gl_WorkGroupID.x] = pos;
+    forces[gl_WorkGroupID.x] = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+}  

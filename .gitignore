@@ -1,0 +1,22 @@
+# VSCode
+.vscode
+.vs
+
+# Build
+bin/Jello-Sim
+bin/Jello-Sim.exe
+bin/Jello-Sim.pdb
+
+# CMake
+build
+Testing
+CMakeFiles
+cmake_install.cmake
+CMakeCache.txt
+CPackConfig.cmake
+CPackSourceConfig.cmake
+CTestTestfile.cmake
+DartConfiguration.tcl
+Makefile
+.idea
+glfw

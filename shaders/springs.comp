@@ -1,0 +1,42 @@
+layout(local_size_x = 1) in;
+
+layout(std140, binding = 1) buffer positions_SSBO {
+    vec4 positions[];
+};
+
+layout(std140, binding = 3) buffer forces_SSBO { 
+    vec4 forces[];
+};
+
+layout(std140, binding = 4) buffer springs_SSBO { 
+    struct
+    {
+        uint point1;
+        uint point2;
+        uint type;
+        float len;
+    } springs[];
+};
+
+layout(location=0) uniform uint block_id; // [0, 8)
+
+void main()
+{
+    float[4] scale;
+    scale[0] = 0.0f;
+    scale[1] = 800.0f; 
+    scale[2] = 800.0f;
+    scale[3] = 200.0f;
+
+    for (uint i = (gl_WorkGroupID.x*8+block_id) * BLOCK_SIZE; i < (gl_WorkGroupID.x*8+block_id+1) * BLOCK_SIZE; i++)
+    {   
+        vec4 force = positions[springs[i].point2] - positions[springs[i].point1];
+        force *= (1 - (springs[i].len / length(force))) * scale[springs[i].type]*1.5f;
+
+        if (springs[i].type != 0)
+        {
+            forces[springs[i].point1] += force;
+            forces[springs[i].point2] -= force;
+        }
+    }
+}  

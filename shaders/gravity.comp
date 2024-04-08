@@ -1,0 +1,15 @@
+layout(local_size_x = 1) in;
+
+layout(std140, binding = 1) buffer positions_SSBO {
+    vec4 positions[];
+};
+
+layout(std140, binding = 3) buffer forces_SSBO { 
+    vec4 forces[];
+};
+
+
+void main()
+{
+    forces[gl_WorkGroupID.x] += vec4(0, -9.81, 0, 0)*1.0/8.0f;
+}  
